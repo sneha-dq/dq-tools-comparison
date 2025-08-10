@@ -1,0 +1,6 @@
+packages:
+  - package: metaplane/dbt_expectations
+    version: 0.10.9  # check latest compatible version on https://hub.getdbt.com/metaplane/dbt_expectations/latest/
+  - package: dbt-labs/dbt_utils
+    version: 1.3.0  # or latest compatible with dbt 1.10.7
+

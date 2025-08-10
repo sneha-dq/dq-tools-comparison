@@ -1,0 +1,32 @@
+version: 2
+models:
+  - name: customer_shopping
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+
+      - name: invoice_no
+        tests:
+          - not_null
+          - unique
+
+      - name: payment_method
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Credit Card', 'Cash', 'UPI', 'Debit Card', 'Net Banking']
+
+      - name: price
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "{{ column_name }}::numeric > 0"
+
+      - name: quantity
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "{{ column_name }}::numeric > 0"
+
