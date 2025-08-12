@@ -32,7 +32,18 @@ This repository demonstrates how to perform data quality (DQ) checks on a sample
 │   │       └── semantic_manifest.json
 │   ├── deequ
 │   ├── great_expectations
+│   │   └── gx
+│   │       ├── checkpoints
+│   │       ├── expectations
+│   │       ├── great_expectations.yml
+│   │       ├── plugins
+│   │       ├── profilers
+│   │       └── uncommitted
 │   └── soda
+│       ├── checks.yml
+│       ├── configuration.yml
+│       ├── README.md
+│       └── soda_report.txt
 ├── data
 │   └── customer_shopping_data.csv
 ├── dq-env310
@@ -49,7 +60,7 @@ This repository demonstrates how to perform data quality (DQ) checks on a sample
     - **dbt_expectations/**: Implementation using dbt-expectations (currently complete).
     - **great_expectations/**: Placeholder for future Great Expectations setup.
     - **deequ/**: Placeholder for future Deequ setup.
-    - **soda/**: Placeholder for future Soda SQL setup.
+    - **soda/**: Implemented
 - **data/**: Contains the raw CSV file to be validated.
 - **dq-env310/**: Python virtual environment and dependencies.
 - **results/**: Intended for storing validation results and reports.
@@ -58,9 +69,9 @@ This repository demonstrates how to perform data quality (DQ) checks on a sample
 ## Current Status
 
 - **Implemented:**  
-  - Data quality checks using [dbt-expectations](https://github.com/metaplane/dbt-expectations) on the customer shopping data CSV.
+  - Data quality checks using [dbt-expectations](https://github.com/metaplane/dbt-expectations) on the customer shopping data CSV, [Great Expectations](https://greatexpectations.io/), [Soda SQL](https://soda.io/)
 - **Planned:**  
-  - Equivalent checks using [Great Expectations](https://greatexpectations.io/), [Soda SQL](https://soda.io/), and [Deequ](https://github.com/awslabs/deequ).
+  - Equivalent checks using [Deequ](https://github.com/awslabs/deequ).
 
 ## Getting Started
 
@@ -75,31 +86,29 @@ This repository demonstrates how to perform data quality (DQ) checks on a sample
     source dq-env310/bin/activate
     ```
 
-3. **Run dbt-expectations checks:**
-    ```bash
-    cd checks/dbt_expectations
-    dbt test
-    ```
-    Results can be found in the `target/` directory and log files.
-
-4. **Add your implementations:**  
-   Follow the examples in `checks/dbt_expectations/` to implement DQ checks using other tools.
+Readme files are placed in respective folders for individual setups
 
 ## Insights
 
-### Differences Between Great Expectations and dbt-expectations
+### Differences: Soda Core vs Great Expectations vs DBT
 
-| Feature                  | dbt-expectations           | Great Expectations          |
-|--------------------------|----------------------------|----------------------------|
-| **Supported Sources**    | SQL databases only         | SQL, files, DataFrames     |
-| **Custom logic**         | SQL only                   | Python, SQL, files         |
-| **Integration**          | dbt only                   | Any Python workflow        |
-| **Reporting**            | dbt logs                   | HTML Data Docs, APIs       |
-| **Interactivity**        | No                         | Yes (Data Docs, Notebooks) |
-| **Expectation Depth**    | Subset (SQL only)          | Full library               |
+| Feature                  | Soda Core                                 | Great Expectations                | DBT (with tests)                      |
+|--------------------------|-------------------------------------------|-----------------------------------|---------------------------------------|
+| **Setup**                | YAML config, CLI, custom SQL metrics      | Python, CLI, config files, Python | SQL/YAML, integrates with db          |
+| **Type Conversion**      | Custom query with casting in checks file  | Python logic, expectation suites  | SQL test logic, schema.yml constraints|
+| **Error Reporting**      | CLI output, Soda Cloud dashboard (pro)    | HTML, JSON, CLI, DataDocs         | CLI output, artifacts, docs           |
+| **Test Granularity**     | Row-level, column-level, aggregate        | Row, column, table, custom logic  | Column, table, custom macros          |
+| **Custom SQL Checks**    | Yes, via query block in YAML              | Yes, via custom expectations      | Yes, via SQL tests                    |
+| **Output Format**        | CLI text, Soda Cloud (pro)                | HTML, JSON, Markdown, CLI         | CLI, artifacts, docs                  |
+| **Ease of Use**          | Simple YAML, CLI, flexible queries        | More Pythonic, rich ecosystem     | SQL-focused, integrates with modeling |
+| **Automated Docs**       | Soda Cloud (pro)                          | DataDocs                          | dbt docs                              |
 
-- **dbt-expectations** is ideal for SQL-centric analytics engineering, seamlessly integrating with dbt models and workflows. However, it is limited to data sources accessible via SQL.
-- **Great Expectations** offers broader support for files, Python data structures, interactive docs, and flexible custom expectations, making it suitable for a wider range of validation scenarios, including local files and non-SQL sources.
+### Summary
+
+- **Soda Core**: Lightweight, YAML-driven, flexible for custom SQL validation, and quick to integrate with CI/CD.
+- **Great Expectations**: Python-centric, rich validations and documentation, suited for data science and analytics teams.
+- **DBT**: SQL-centric, best for data engineering/modeling, integrates tests with transformations and documentation.
+
 
 ## Future Work
 
@@ -108,5 +117,14 @@ This repository demonstrates how to perform data quality (DQ) checks on a sample
 - Summarize best practices and recommendations for choosing a DQ tool based on project needs.
 
 ---
+## References
+
+- [Soda Core Documentation](https://docs.soda.io/soda-core/)
+- [Great Expectations Documentation](https://docs.greatexpectations.io/docs/)
+- [DBT Documentation](https://docs.getdbt.com/docs/introduction)
+
+---
+
+*Maintained by [@sneha-dq](https://github.com/sneha-dq)*
 
 **Contributions and suggestions are welcome!**
